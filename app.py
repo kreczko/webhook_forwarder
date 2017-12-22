@@ -22,7 +22,7 @@ def get_kafka_producer():
     }
     return confluent_kafka.Producer(**conf)
 
-KAFKA_PRODUCER = get_kafka_producer()
+# KAFKA_PRODUCER = get_kafka_producer()
 
 @app.route('/gitlab_forwarder', methods=['POST'])
 def forward_gitlab():
