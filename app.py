@@ -32,8 +32,8 @@ def get_kafka_producer():
     try:
         producer = confluent_kafka.Producer(**conf)
         return producer
-    except Exception, e:
-        print('Could not create kafka producer')
+    except Exception as e:
+        print('Could not create kafka producer', e)
 
 KAFKA_PRODUCER = get_kafka_producer()
 
