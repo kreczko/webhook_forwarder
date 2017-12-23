@@ -91,8 +91,9 @@ def get_kafka_brokers():
     if not os.environ.get('KAFKA_URL'):
         raise RuntimeError('The KAFKA_URL config variable is not set.')
 
-    return ['{}:{}'.format(parsedUrl.hostname, parsedUrl.port) for parsedUrl in
-            [urlparse(url) for url in os.environ.get('KAFKA_URL').split(',')]]
+    return os.environ.get('KAFKA_URL').split(',')
+    # return ['{}:{}'.format(parsedUrl.hostname, parsedUrl.port) for parsedUrl in
+    #         [urlparse(url) for url in os.environ.get('KAFKA_URL').split(',')]]
 
 
 def get_kafka_producer(acks='all',
