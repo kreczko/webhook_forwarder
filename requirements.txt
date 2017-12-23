@@ -3,3 +3,4 @@ gunicorn
 confluent-kafka
 redis
 kafka
+cryptography
