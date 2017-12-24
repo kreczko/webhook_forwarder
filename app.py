@@ -1,7 +1,7 @@
 import os
 import json
 import sys
-from flask import Flask, abort
+from flask import Flask, abort, request
 # from kafka_helper import get_kafka_producer
 import confluent_kafka
 
