@@ -2,28 +2,29 @@ import os
 import json
 import sys
 from flask import Flask, abort
-from kafka_helper import get_kafka_producer
+# from kafka_helper import get_kafka_producer
+import confluent_kafka
 
 app = Flask(__name__)
 
-# def get_kafka_producer():
-#     '''
-#         Get the kafka producer, might differ depending on service
-#     '''
-#     conf = {
-#             'bootstrap.servers': os.environ['CLOUDKARAFKA_BROKERS'],
-#             'session.timeout.ms': 6000,
-#             'default.topic.config': {'auto.offset.reset': 'smallest'},
-#             'security.protocol': 'SASL_SSL',
-#             'sasl.mechanisms': 'SCRAM-SHA-256',
-#             'sasl.username': os.environ['CLOUDKARAFKA_USERNAME'],
-#             'sasl.password': os.environ['CLOUDKARAFKA_PASSWORD'],
-#     }
-#     try:
-#         producer = confluent_kafka.Producer(**conf)
-#         return producer
-#     except Exception as e:
-#         print('Could not create kafka producer', e)
+def get_kafka_producer():
+    '''
+        Get the kafka producer, might differ depending on service
+    '''
+    conf = {
+            'bootstrap.servers': os.environ['CLOUDKARAFKA_BROKERS'],
+            'session.timeout.ms': 6000,
+            'default.topic.config': {'auto.offset.reset': 'smallest'},
+            'security.protocol': 'SASL_SSL',
+            'sasl.mechanisms': 'SCRAM-SHA-256',
+            'sasl.username': os.environ['CLOUDKARAFKA_USERNAME'],
+            'sasl.password': os.environ['CLOUDKARAFKA_PASSWORD'],
+    }
+    try:
+        producer = confluent_kafka.Producer(**conf)
+        return producer
+    except Exception as e:
+        print('Could not create kafka producer', e)
 
 KAFKA_PRODUCER = get_kafka_producer()
 
@@ -37,9 +38,9 @@ def forward_gitlab():
         return
 
     content = request.get_json(silent=True)
-    # js = json.dumps(content)
+    js = json.dumps(content)
 
-    KAFKA_PRODUCER.send(kafka_topic, content)
+    KAFKA_PRODUCER.produce(kafka_topic, js)
     KAFKA_PRODUCER.flush()
 
 @app.route('/')
