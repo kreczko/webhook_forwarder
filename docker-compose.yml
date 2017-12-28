@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+    image: kreczko/webhook_forwarder
+    command: 'bash -c "gunicorn app:app --log-file=-"'
+    working_dir: /app/user
+    environment:
+      PORT: 8080
+    env_file: .env
+    ports:
+      - '8080:8080'
+  shell:
+    build:
+      context: .
+    image: kreczko/webhook_forwarder
+    command: bash
+    working_dir: /app/user
+    environment:
+      PORT: 8080
+    ports:
+      - '8080:8080'
+    volumes:
+      - '.:/app/user'
