@@ -1,5 +1,5 @@
 {
   "name": "webhook_forwarder",
-  "image": "kreczko/webhook_forwarder",
+  "image": "kreczko/webhook_forwarder:web",
   "addons": []
 }
