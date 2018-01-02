@@ -6,5 +6,3 @@ kafka
 cryptography
 Jinja2
 Werkzeug
-distribute
-wsgiref
