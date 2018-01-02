@@ -6,11 +6,13 @@ from flask import Flask, abort, request
 import confluent_kafka
 
 app = Flask(__name__)
+KAFKA_PRODUCER = None
 
 def get_kafka_producer():
     '''
         Get the kafka producer, might differ depending on service
     '''
+    global KAFKA_PRODUCER
     conf = {
             'bootstrap.servers': os.environ['CLOUDKARAFKA_BROKERS'],
             'session.timeout.ms': 6000,
@@ -20,13 +22,13 @@ def get_kafka_producer():
             'sasl.username': os.environ['CLOUDKARAFKA_USERNAME'],
             'sasl.password': os.environ['CLOUDKARAFKA_PASSWORD'],
     }
+    if KAFKA_PRODUCER is not None:
+        return KAFKA_PRODUCER
     try:
-        producer = confluent_kafka.Producer(**conf)
-        return producer
+        KAFKA_PRODUCER = confluent_kafka.Producer(**conf)
+        return KAFKA_PRODUCER
     except Exception as e:
         print('Could not create kafka producer', e)
-
-KAFKA_PRODUCER = get_kafka_producer()
 
 @app.route('/gitlab_forwarder', methods=['POST'])
 def forward_gitlab():
@@ -40,8 +42,9 @@ def forward_gitlab():
     content = request.get_json(silent=True)
     js = json.dumps(content)
 
-    KAFKA_PRODUCER.produce(kafka_topic, js)
-    KAFKA_PRODUCER.flush()
+    producer = get_kafka_producer()
+    producer.produce(kafka_topic, js)
+    producer.flush()
 
 @app.route('/')
 def homepage():
