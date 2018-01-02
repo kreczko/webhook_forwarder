@@ -29,6 +29,7 @@ def get_kafka_producer():
         return KAFKA_PRODUCER
     except Exception as e:
         print('Could not create kafka producer', e)
+        raise e
 
 @app.route('/gitlab_forwarder', methods=['POST'])
 def forward_gitlab():
