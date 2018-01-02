@@ -47,6 +47,8 @@ def forward_gitlab():
     producer.produce(kafka_topic, js)
     producer.flush()
 
+    return "OK"
+
 @app.route('/')
 def homepage():
 
