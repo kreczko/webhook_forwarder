@@ -11,6 +11,15 @@ app.logger.setLevel(logging.ERROR)
 if os.environ.get('DEBUG', False):
     app.logger.setLevel(logging.DEBUG)
 
+
+def _delivery_callback(err, msg):
+    if err:
+        app.logger.error('Message failed delivery: {}'.format(err))
+    else:
+        app.logger.debug('Message delivered to {}[{}]'.format(
+            msg.topic(), msg.partition()))
+
+
 @app.route('/gitlab_forwarder', methods=['POST'])
 def forward_gitlab():
     kafka_topic = "{}".format(os.environ['KAFKA_TOPIC'])
@@ -28,7 +37,7 @@ def forward_gitlab():
     js = json.dumps(content)
 
     producer = get_kafka_producer()
-    producer.produce(kafka_topic, js)
+    producer.produce(kafka_topic, js, callback=_delivery_callback)
     producer.flush()
 
     return "OK"
