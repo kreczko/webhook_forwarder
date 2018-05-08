@@ -3,13 +3,13 @@ import sys
 import confluent_kafka
 
 __CONF__ = {
-    'bootstrap.servers': os.environ['CLOUDKARAFKA_BROKERS'],
+    'bootstrap.servers': os.environ['KAFKA_BROKERS'],
     'session.timeout.ms': 6000,
     'default.topic.config': {'auto.offset.reset': 'smallest'},
     'security.protocol': 'SASL_SSL',
     'sasl.mechanisms': 'SCRAM-SHA-256',
-    'sasl.username': os.environ['CLOUDKARAFKA_USERNAME'],
-    'sasl.password': os.environ['CLOUDKARAFKA_PASSWORD'],
+    'sasl.username': os.environ['KAFKA_USERNAME'],
+    'sasl.password': os.environ['KAFKA_PASSWORD'],
     'group.id': 'bot',
 }
 

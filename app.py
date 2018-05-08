@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/gitlab_forwarder', methods=['POST'])
 def forward_gitlab():
-    kafka_topic = "{}gitlab".format(os.environ['CLOUDKARAFKA_TOPIC_PREFIX'])
+    kafka_topic = "{}".format(os.environ['KAFKA_TOPIC'])
 
     TOKEN = os.environ.get("GITLAB_TOKEN")
     if TOKEN is None or request.headers.get('X-Gitlab-Token') != TOKEN:
