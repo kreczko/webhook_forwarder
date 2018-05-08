@@ -2,8 +2,8 @@ FROM python:alpine3.6
 
 LABEL maintainer="kreczko@cern.ch"
 
-ARG LIBRESSL_VERSION=2.6
-ARG LIBRDKAFKA_VERSION=0.11.1-r1
+ARG LIBRESSL_VERSION=2.7
+ARG LIBRDKAFKA_VERSION=0.11.4-r1
 
 RUN apk update && \
     apk add --no-cache \
